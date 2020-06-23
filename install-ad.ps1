@@ -1,7 +1,4 @@
-param(
-    $domain = 'vagrant.lab'
-)
-
+$domain = 'vagrant.lab'
 $netbiosDomain = ($domain -split '\.')[0].ToUpperInvariant()
 
 $safeModeAdminstratorPassword = ConvertTo-SecureString 'Welcome!20' -AsPlainText -Force
