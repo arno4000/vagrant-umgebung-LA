@@ -2,8 +2,8 @@ Vagrant.configure("2") do |config|
   config.vm.box = "peru/windows-server-2019-datacenter-x64-eval"
   config.vm.box_version = "20200601.01"
   #config.vm.provision "shell", path: "provisioning.ps1"
-  config.winrm.transport = :plaintext
-  config.winrm.basic_auth_only = true
+  #config.winrm.transport = :plaintext
+  #config.winrm.basic_auth_only = true
   config.vm.define "srv01" do |srv01|
     srv01.vm.box = "peru/windows-server-2019-datacenter-x64-eval"
 	  srv01.vm.hostname = "srv01"
