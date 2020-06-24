@@ -19,6 +19,7 @@ Vagrant.configure("2") do |config|
     #RDP Port must be changed manually. Otherwise RDP will not work
     srv02.vm.network "forwarded_port", guest: 3389, host: 3387, id: "rdp2"
     srv02.vm.network :private_network, ip: "192.168.20.20"
+    srv02.vm.provision "shell", path: "set-dns.ps1"
     srv02.vm.provision "shell", path: "install-iis.ps1"
   end
   config.vm.provider "virtualbox" do |v|
