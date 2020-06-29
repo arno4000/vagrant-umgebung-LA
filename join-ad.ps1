@@ -1,5 +1,6 @@
 #Script to Join the vagrant.lab domain
 
+
 $domain = "vagrant.lab"
 $user = "vagrant\Administrator"
 $password = ConvertTo-SecureString -AsPlainText -Force -String "Welcome!20"
