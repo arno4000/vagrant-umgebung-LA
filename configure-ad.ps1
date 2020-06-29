@@ -60,3 +60,6 @@ Set-ADAccountPassword `
 Set-ADUser `
     -Identity "CN=Administrator,$usersAdPath" `
     -PasswordNeverExpires $true
+
+$name = "vmadmin"
+New-AdUser -Path $usersAdPath -Name $name -UserPrincipalName "$name@$domain" -GivenName "vmadmin" -DisplayName "vmadmin" -AccountPassword $password -Enabled $true -PasswordNeverExpires $true

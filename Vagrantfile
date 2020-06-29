@@ -34,6 +34,7 @@ Vagrant.configure("2") do |config|
     cli01.vm.provision "shell", path: "set-dns.ps1"
     cli01.vm.provision "shell", path: "join-ad.ps1"
     cli01.vm.provision "shell", reboot: true
+    cli01.vm.provision "shell", path: "install-software.ps1"
   end
   config.vm.provider "virtualbox" do |v|
     v.gui = false
