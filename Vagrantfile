@@ -12,6 +12,7 @@ Vagrant.configure("2") do |config|
     srv01.vm.provision "install-ad", type: "shell", path: "install-ad.ps1"
     srv01.vm.provision "shell", reboot: true
     srv01.vm.provision "configure-ad", type: "shell", path: "configure-ad.ps1", privileged: false
+    srv01.vm.provision "configure-dns", type: "shell", path: "configure-dns.ps1", privileged: false
   end
   config.vm.define "srv02" do |srv02|
     srv02.vm.box = "peru/windows-server-2019-datacenter-x64-eval"
@@ -21,6 +22,8 @@ Vagrant.configure("2") do |config|
     srv02.vm.network :private_network, ip: "192.168.20.20"
     srv02.vm.provision "shell", path: "set-dns.ps1"
     srv02.vm.provision "shell", path: "install-iis.ps1"
+    srv02.vm.provision "shell", path: "join-ad.ps1"
+    srv02.vm.provision "shell", reboot: true
   end
   config.vm.define "cli01" do |cli01|
     cli01.vm.box = "StefanScherer/windows_10"
