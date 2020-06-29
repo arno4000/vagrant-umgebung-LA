@@ -22,6 +22,16 @@ Vagrant.configure("2") do |config|
     srv02.vm.provision "shell", path: "set-dns.ps1"
     srv02.vm.provision "shell", path: "install-iis.ps1"
   end
+  config.vm.define "cli01" do |cli01|
+    cli01.vm.box = "StefanScherer/windows_10"
+    cli01.vm.box_version = "2020.05.27"
+    cli01.vm.hostname = "cli01"
+    cli01.vm.network "forwarded_port", guest: 3389, host: 3386, id: "rdp3"
+    cli01.vm.network :private_network, ip: "192.168.20.30"
+    cli01.vm.provision "shell", path: "set-dns.ps1"
+    cli01.vm.provision "shell", path: "join-ad.ps1"
+    cli01.vm.provision "shell", reboot: true
+  end
   config.vm.provider "virtualbox" do |v|
     v.gui = false
   end
