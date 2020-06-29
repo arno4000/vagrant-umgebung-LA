@@ -44,24 +44,12 @@ Set-DnsServerSetting $dnsServerSettings
 # flush the dns client cache.
 Clear-DnsClientCache
 
+#Create DNS reverse lookup zone
+Add-DnsServerPrimaryZone -NetworkID "192.168.20.0/24" -ZoneFile "20.168.192.in-addr.arpa.dns"
 
-# add the vagrant user to the Enterprise Admins group.
-# NB this is needed to install the Enterprise Root Certification Authority.
-<#Add-ADGroupMember `
-    -Identity 'Enterprise Admins' `
-    -Members "CN=vagrant,$usersAdPath"
-
-
-# disable all user accounts, except the ones defined here.
-$enabledAccounts = @(
-    # NB vagrant only works when this account is enabled.
-    'vagrant',
-    'Administrator'
-)
-Get-ADUser -Filter { Enabled -eq $true } `
-| Where-Object { $enabledAccounts -notcontains $_.Name } `
-| Disable-ADAccount
-#>
+#Add PTR records
+Add-DnsServerResourceRecordPtr -Name "20" -ZoneName "20.168.192.in-addr.arpa" -AllowUpdateAny -PtrDomainName "srv02.vagrant.lab"
+Add-DnsServerResourceRecordPtr -Name "30" -ZoneName "20.168.192.in-addr.arpa" -AllowUpdateAny -PtrDomainName "cli01.vagrant.lab"
 
 # set the Administrator password.
 # NB this is also an Domain Administrator account.
@@ -72,91 +60,3 @@ Set-ADAccountPassword `
 Set-ADUser `
     -Identity "CN=Administrator,$usersAdPath" `
     -PasswordNeverExpires $true
-
-<#
-# add the sonar-administrators group.
-# NB this is used by https://github.com/rgl/sonarqube-windows-vagrant.
-New-ADGroup `
-    -Path $usersAdPath `
-    -Name 'sonar-administrators' `
-    -GroupCategory 'Security' `
-    -GroupScope 'DomainLocal'
-
-
-# add John Doe.
-$name = 'john.doe'
-New-ADUser `
-    -Path $usersAdPath `
-    -Name $name `
-    -UserPrincipalName "$name@$domain" `
-    -EmailAddress "$name@$domain" `
-    -GivenName 'John' `
-    -Surname 'Doe' `
-    -DisplayName 'John Doe' `
-    -AccountPassword $password `
-    -Enabled $true `
-    -PasswordNeverExpires $true
-# we can also set properties.
-Set-ADUser `
-    -Identity "CN=$name,$usersAdPath" `
-    -HomePage "https://$domain/~$name"
-# add user to the Domain Admins group.
-Add-ADGroupMember `
-    -Identity 'Domain Admins' `
-    -Members "CN=$name,$usersAdPath"
-# add user to the sonar-administrators group.
-Add-ADGroupMember `
-    -Identity 'sonar-administrators' `
-    -Members "CN=$name,$usersAdPath"
-
-
-# add Jane Doe.
-$name = 'jane.doe'
-New-ADUser `
-    -Path $usersAdPath `
-    -Name $name `
-    -UserPrincipalName "$name@$domain" `
-    -EmailAddress "$name@$domain" `
-    -GivenName 'Jane' `
-    -Surname 'Doe' `
-    -DisplayName 'Jane Doe' `
-    -AccountPassword $password `
-    -Enabled $true `
-    -PasswordNeverExpires $true
-
-
-echo 'john.doe Group Membership'
-Get-ADPrincipalGroupMembership -Identity 'john.doe' `
-| Select-Object Name, DistinguishedName, SID `
-| Format-Table -AutoSize | Out-String -Width 2000
-
-echo 'jane.doe Group Membership'
-Get-ADPrincipalGroupMembership -Identity 'jane.doe' `
-| Select-Object Name, DistinguishedName, SID `
-| Format-Table -AutoSize | Out-String -Width 2000
-
-echo 'vagrant Group Membership'
-Get-ADPrincipalGroupMembership -Identity 'vagrant' `
-| Select-Object Name, DistinguishedName, SID `
-| Format-Table -AutoSize | Out-String -Width 2000
-
-
-echo 'Enterprise Administrators'
-Get-ADGroupMember `
-    -Identity 'Enterprise Admins' `
-| Select-Object Name, DistinguishedName, SID `
-| Format-Table -AutoSize | Out-String -Width 2000
-
-echo 'Domain Administrators'
-Get-ADGroupMember `
-    -Identity 'Domain Admins' `
-| Select-Object Name, DistinguishedName, SID `
-| Format-Table -AutoSize | Out-String -Width 2000
-
-
-echo 'Enabled Domain User Accounts'
-Get-ADUser -Filter { Enabled -eq $true } `
-| Select-Object Name, DistinguishedName, SID `
-| Format-Table -AutoSize | Out-String -Width 2000
-
-#>
