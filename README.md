@@ -1,5 +1,5 @@
 # vagrant-umgebung-LA
-Vagrant-Umgebung für die Lehrlinge der Bedag Informatik AG. Mit hilfe dieser Vagrant-Umgebung ist es einfach möglich, dass du dein eigenes, kleines, virtuelles Rechenzentrum in wenigen Schritten in Betrieb nehmen kannst. Alles was du dazu benötigst, erfährst du in der folgenden Anleitung.
+Mit hilfe dieser Vagrant-Umgebung ist es einfach möglich, dass du dein eigenes, kleines, virtuelles Rechenzentrum in wenigen Schritten in Betrieb nehmen kannst. Alles was du dazu benötigst, erfährst du in der folgenden Anleitung.
 
 ## 1. Voraussetzungen
 Um die Vagrant-Umgebung auf deinem Testgerät verwenden zu können, musst du die folgenden Voraussetzungen erfüllen: 
